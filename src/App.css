@@ -1,0 +1,90 @@
+/* File: /src/App.css */
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+.app-container {
+  padding: 30px;
+  max-width: 95%;
+  margin: auto;
+}
+
+.title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 10px 12px;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+}
+
+.styled-table th {
+  background-color: #2c3e50;
+  color: #ffffff;
+  cursor: pointer;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.styled-table tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+/* Highlight styles for MSR */
+.highlight-high {
+  background-color: #c8e6c9;
+  font-weight: bold;
+}
+
+.highlight-mid {
+  background-color: #fff9c4;
+}
+
+.highlight-low {
+  background-color: #ffcdd2;
+}
+
+.msr-bar {
+  background-color: #4caf50;
+  color: #fff;
+  height: 20px;
+  line-height: 20px;
+  border-radius: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* Loading state */
+.loading {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #888;
+}
+
+
+
+
+
