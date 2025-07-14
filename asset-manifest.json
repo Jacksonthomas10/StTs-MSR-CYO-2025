@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/MSR-NBASummerLeague-2025/static/css/main.543eb943.css",
+    "main.js": "/MSR-NBASummerLeague-2025/static/js/main.d934715c.js",
+    "index.html": "/MSR-NBASummerLeague-2025/index.html",
+    "main.543eb943.css.map": "/MSR-NBASummerLeague-2025/static/css/main.543eb943.css.map",
+    "main.d934715c.js.map": "/MSR-NBASummerLeague-2025/static/js/main.d934715c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.543eb943.css",
+    "static/js/main.d934715c.js"
+  ]
+}
