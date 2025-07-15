@@ -1,26 +1,46 @@
-// File: /src/MSRSummerLeagueData2025.js
 import React, { useEffect, useState } from 'react';
+import * as d3 from 'd3';
 import './App.css';
 
-function MSRSummerLeagueData2025() {
-  const [data, setData] = useState([]);
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
+function App() {
+  const [playerData, setPlayerData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortConfig, setSortConfig] = useState({ key: 'MSR', direction: 'descending' });
+  const [loading, setLoading] = useState(true);
+
+  const csvUrl = process.env.PUBLIC_URL + '/msr_summer_league_2025.csv';
 
   useEffect(() => {
-    fetch(`${process.env.PUBLIC_URL}/MSR Summer League Data 7-14-25 - w Archetypes.csv`)
-      .then((response) => response.text())
-      .then((csv) => {
-        const [headerLine, ...lines] = csv.trim().split('\n');
-        const headers = headerLine.split(',');
-        const rows = lines.map(line => {
-          const values = line.split(',');
-          return headers.reduce((obj, header, i) => {
-            obj[header.trim()] = values[i]?.trim();
-            return obj;
-          }, {});
-        });
-        setData(rows);
-      });
+    d3.csv(csvUrl, (row) => {
+      return {
+        Player: row['Player'],
+        MSR: +row['MSR'],
+        MIN: +row['MIN'],
+        PTS: +row['PTS'],
+        FGM: +row['FGM'],
+        FGA: +row['FGA'],
+        FGPercent: +row['FG%'],
+        '3PTM': +row['3PTM'],
+        '3PA': +row['3PA'],
+        '3PPercent': +row['3P%'],
+        FTM: +row['FTM'],
+        FTA: +row['FTA'],
+        FTPercent: +row['FT%'],
+        OREB: +row['OREB'],
+        DREB: +row['DREB'],
+        REB: +row['REB'],
+        AST: +row['AST'],
+        TOV: +row['TOV'],
+        STL: +row['STL'],
+        BLK: +row['BLK'],
+        PF: +row['PF'],
+        PlusMinus: +row['Plus/Minus'],
+        EuropeanArchetype: row['European Archetype']
+      };
+    }).then((data) => {
+      setPlayerData(data);
+      setLoading(false);
+    });
   }, []);
 
   const sortTable = (key) => {
@@ -29,49 +49,77 @@ function MSRSummerLeagueData2025() {
       direction = 'descending';
     }
     setSortConfig({ key, direction });
-    setData((prevData) => {
-      return [...prevData].sort((a, b) => {
-        const aVal = isNaN(+a[key]) ? a[key] : +a[key];
-        const bVal = isNaN(+b[key]) ? b[key] : +b[key];
-        if (aVal < bVal) return direction === 'ascending' ? -1 : 1;
-        if (aVal > bVal) return direction === 'ascending' ? 1 : -1;
-        return 0;
-      });
+
+    const sorted = [...playerData].sort((a, b) => {
+      if (a[key] < b[key]) return direction === 'ascending' ? -1 : 1;
+      if (a[key] > b[key]) return direction === 'ascending' ? 1 : -1;
+      return 0;
     });
+    setPlayerData(sorted);
   };
 
+  const getMSRClass = (val) => {
+    if (val >= 7) return 'highlight-high';
+    if (val >= 5) return 'highlight-mid';
+    return 'highlight-low';
+  };
+
+  const filteredData = playerData.filter((player) =>
+    player.Player.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="App">
-      <h1>Summer League 2025 MSR Leaderboard</h1>
-      {data.length === 0 ? (
-        <p>Loading...</p>
+    <div className="app-container">
+      <header className="app-header">
+        🏀 <span className="msr-title">MSR Leaderboard</span> – 2025 NBA Summer League
+      </header>
+
+      <input
+        type="text"
+        className="search-bar"
+        placeholder="Search by player name..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+
+      {loading ? (
+        <p>Loading data…</p>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              {Object.keys(data[0]).map((key) => (
-                <th key={key} onClick={() => sortTable(key)} style={{ cursor: 'pointer' }}>
-                  {key}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row, idx) => (
-              <tr key={idx}>
-                {Object.values(row).map((val, i) => (
-                  <td key={i}>{val}</td>
+        <div className="table-wrapper">
+          <table className="leaderboard-table">
+            <thead>
+              <tr>
+                {Object.keys(playerData[0] || {}).map((key) => (
+                  <th key={key} onClick={() => sortTable(key)}>
+                    {key}
+                  </th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredData.map((player, index) => (
+                <tr key={index}>
+                  {Object.entries(player).map(([key, val]) => (
+                    <td
+                      key={key}
+                      className={key === 'MSR' ? getMSRClass(val) : ''}
+                    >
+                      {val}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
 }
 
-export default MSRSummerLeagueData2025;
+export default App;
+
+
 
 
 
