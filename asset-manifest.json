@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/MSR-NBASummerLeague-2025/static/css/main.539b0d83.css",
-    "main.js": "/MSR-NBASummerLeague-2025/static/js/main.887ba9e9.js",
+    "main.css": "/MSR-NBASummerLeague-2025/static/css/main.f576e43e.css",
+    "main.js": "/MSR-NBASummerLeague-2025/static/js/main.501ee80d.js",
     "index.html": "/MSR-NBASummerLeague-2025/index.html",
-    "main.539b0d83.css.map": "/MSR-NBASummerLeague-2025/static/css/main.539b0d83.css.map",
-    "main.887ba9e9.js.map": "/MSR-NBASummerLeague-2025/static/js/main.887ba9e9.js.map"
+    "main.f576e43e.css.map": "/MSR-NBASummerLeague-2025/static/css/main.f576e43e.css.map",
+    "main.501ee80d.js.map": "/MSR-NBASummerLeague-2025/static/js/main.501ee80d.js.map"
   },
   "entrypoints": [
-    "static/css/main.539b0d83.css",
-    "static/js/main.887ba9e9.js"
+    "static/css/main.f576e43e.css",
+    "static/js/main.501ee80d.js"
   ]
 }
