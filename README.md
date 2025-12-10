@@ -1,70 +1,56 @@
-# Getting Started with Create React App
+# 🏀 St. T’s MSR Leaderboard — CYO 2025
+Modern Skill Rating (MSR) tracking system for the **St. T’s CYO Basketball Program (2025 season)**.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project provides a simple, transparent, and team-centered way to measure complete player contributions beyond scoring — including effort, efficiency, rebounding, playmaking, defense, and overall impact on winning.
 
-## Available Scripts
+The leaderboard updates from a CSV dataset and displays a clean, mobile-friendly UI designed for players and families to follow along throughout the season.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🚀 Live Leaderboard
+(Automatically updates via GitHub Pages)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+🔗 **https://jacksonthomas10.github.io/StTs-MSR-CYO-2025/**
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 📊 What Is MSR?
+**MSR = Modern Skill Rating**, a composite stat designed to measure:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Hustle  
+- Efficiency  
+- Rebounding  
+- Playmaking  
+- Defensive contributions  
+- Turnover avoidance  
+- Overall impact per minute  
 
-### `npm run build`
+> **MSR is NOT a ranking system.**  
+> It is a *development tool* to help players understand all the ways they contribute to the team — not just scoring.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Color coding helps players quickly see growth areas:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+| MSR Range | Meaning      | Color     |
+|----------|--------------|-----------|
+| 35+      | Elite        | Cardinal Red |
+| 15–34    | Strong       | Amber |
+| <15      | Developing   | Gray |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## 🖥 Features
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### ✔ Clean, centered leaderboard UI  
+### ✔ Fully mobile-friendly (scrollable)  
+### ✔ Sortable columns (A–Z, Z–A)  
+### ✔ Searchable player list  
+### ✔ Color-coded MSR performance  
+### ✔ CSV-driven data (easy weekly updates)  
+### ✔ St. T’s Cardinal Red theme  
+### ✔ Deployed through GitHub Pages  
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 📁 Project Structure
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
