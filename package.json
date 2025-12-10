@@ -1,10 +1,10 @@
 {
-  "name": "msr-summer-league-leaderboard",
+  "name": "stts-msr-cyo-2025",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://jacksonthomas10.github.io/MSR-NBASummerLeague-2025",
+  "homepage": "https://jacksonthomas10.github.io/StTs-MSR-CYO-2025",
   "dependencies": {
-    "d3": "^7.9.0",
+    "d3": "^7.8.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1"
@@ -15,10 +15,16 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
     "production": [
@@ -33,3 +39,4 @@
     ]
   }
 }
+

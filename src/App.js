@@ -1,123 +1,181 @@
-import React, { useEffect, useState } from 'react';
-import * as d3 from 'd3';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import * as d3 from "d3";
+import "./App.css";
 
 function App() {
   const [playerData, setPlayerData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortConfig, setSortConfig] = useState({ key: 'MSR', direction: 'descending' });
-  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortConfig, setSortConfig] = useState({
+    key: "MSR",
+    direction: "desc",
+  });
 
-  const csvUrl = process.env.PUBLIC_URL + '/msr_summer_league_2025.csv';
+  const csvUrl = process.env.PUBLIC_URL + "/stt_msr_clean_fixed.csv";
 
+  /* ---------------------------------------------
+     LOAD DATA
+  --------------------------------------------- */
   useEffect(() => {
-    d3.csv(csvUrl, (row) => {
-      return {
-        Player: row['Player'],
-        MSR: +row['MSR'],
-        MIN: +row['MIN'],
-        PTS: +row['PTS'],
-        FGM: +row['FGM'],
-        FGA: +row['FGA'],
-        FGPercent: +row['FG%'],
-        '3PTM': +row['3PTM'],
-        '3PA': +row['3PA'],
-        '3PPercent': +row['3P%'],
-        FTM: +row['FTM'],
-        FTA: +row['FTA'],
-        FTPercent: +row['FT%'],
-        OREB: +row['OREB'],
-        DREB: +row['DREB'],
-        REB: +row['REB'],
-        AST: +row['AST'],
-        TOV: +row['TOV'],
-        STL: +row['STL'],
-        BLK: +row['BLK'],
-        PF: +row['PF'],
-        PlusMinus: +row['Plus/Minus'],
-        EuropeanArchetype: row['European Archetype']
-      };
-    }).then((data) => {
-      setPlayerData(data);
-      setLoading(false);
+    d3.csv(csvUrl).then((data) => {
+      const cleaned = data.map((row) => ({
+        Name: row.Name,
+        Games: Number(row.Games),
+        MSR: Number(row.MSR),
+        MSR_Avg: Number(row.MSR_Avg),
+      }));
+
+      setPlayerData(cleaned);
     });
+  }, [csvUrl]);
+
+  /* ---------------------------------------------
+     SCROLL SHADOW EFFECT
+  --------------------------------------------- */
+  useEffect(() => {
+    const container = document.querySelector(".table-container");
+
+    const onScroll = () => {
+      if (!container) return;
+
+      // left shadow
+      if (container.scrollLeft > 0) {
+        container.classList.add("scrolled-left");
+      } else {
+        container.classList.remove("scrolled-left");
+      }
+
+      // right shadow
+      if (
+        container.scrollLeft + container.clientWidth >=
+        container.scrollWidth - 2
+      ) {
+        container.classList.add("scrolled-right");
+      } else {
+        container.classList.remove("scrolled-right");
+      }
+    };
+
+    if (container) container.addEventListener("scroll", onScroll);
+    return () => {
+      if (container) container.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
-  const sortTable = (key) => {
-    let direction = 'ascending';
-    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
-      direction = 'descending';
+  /* ---------------------------------------------
+     SORTING LOGIC
+  --------------------------------------------- */
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
     }
     setSortConfig({ key, direction });
-
-    const sorted = [...playerData].sort((a, b) => {
-      if (a[key] < b[key]) return direction === 'ascending' ? -1 : 1;
-      if (a[key] > b[key]) return direction === 'ascending' ? 1 : -1;
-      return 0;
-    });
-    setPlayerData(sorted);
   };
 
-  const getMSRClass = (val) => {
-    if (val >= 7) return 'highlight-high';
-    if (val >= 5) return 'highlight-mid';
-    return 'highlight-low';
-  };
+  const sortedData = [...playerData].sort((a, b) => {
+    const aVal = a[sortConfig.key];
+    const bVal = b[sortConfig.key];
 
-  const filteredData = playerData.filter((player) =>
-    player.Player.toLowerCase().includes(searchTerm.toLowerCase())
+    if (aVal < bVal) return sortConfig.direction === "asc" ? -1 : 1;
+    if (aVal > bVal) return sortConfig.direction === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  const filteredData = sortedData.filter((player) =>
+    player.Name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const getMSRClass = (value) => {
+    if (value >= 35) return "msr-high";
+    if (value >= 15) return "msr-mid";
+    return "msr-low";
+  };
+
+  /* ---------------------------------------------
+     RENDER
+  --------------------------------------------- */
   return (
     <div className="app-container">
-      <header className="app-header">
-        🏀 <span className="msr-title">MSR Leaderboard</span> – 2025 NBA Summer League
-      </header>
+      <header className="app-header">St. T’s MSR Leaderboard</header>
 
       <input
         type="text"
         className="search-bar"
-        placeholder="Search by player name..."
+        placeholder="Search players..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
 
-      {loading ? (
-        <p>Loading data…</p>
-      ) : (
-        <div className="table-wrapper">
-          <table className="leaderboard-table">
-            <thead>
-              <tr>
-                {Object.keys(playerData[0] || {}).map((key) => (
-                  <th key={key} onClick={() => sortTable(key)}>
-                    {key}
-                  </th>
-                ))}
+      <div className="table-container">
+        <table className="leaderboard-table">
+          <thead>
+            <tr>
+              <th onClick={() => handleSort("Name")}>
+                Name{" "}
+                {sortConfig.key === "Name" && (
+                  <span className="sort-arrow">⬍</span>
+                )}
+              </th>
+
+              <th onClick={() => handleSort("Games")}>
+                Games{" "}
+                {sortConfig.key === "Games" && (
+                  <span className="sort-arrow">⬍</span>
+                )}
+              </th>
+
+              <th onClick={() => handleSort("MSR")}>
+                MSR{" "}
+                {sortConfig.key === "MSR" && (
+                  <span className="sort-arrow">⬍</span>
+                )}
+              </th>
+
+              <th onClick={() => handleSort("MSR_Avg")}>
+                MSR Avg{" "}
+                {sortConfig.key === "MSR_Avg" && (
+                  <span className="sort-arrow">⬍</span>
+                )}
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {filteredData.map((player, idx) => (
+              <tr key={idx}>
+                <td>{player.Name}</td>
+
+                <td>{player.Games}</td>
+
+                <td className={getMSRClass(player.MSR)}>
+                  {player.MSR.toFixed(2)}
+                </td>
+
+                <td>{player.MSR_Avg.toFixed(3)}</td>
               </tr>
-            </thead>
-            <tbody>
-              {filteredData.map((player, index) => (
-                <tr key={index}>
-                  {Object.entries(player).map(([key, val]) => (
-                    <td
-                      key={key}
-                      className={key === 'MSR' ? getMSRClass(val) : ''}
-                    >
-                      {val}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
