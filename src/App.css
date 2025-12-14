@@ -1,10 +1,12 @@
 /* ---------------------------------------------------
-   GLOBAL + PAGE LAYOUT
+   GLOBAL + PAGE LAYOUT — iPhone Scroll Fixes
 --------------------------------------------------- */
 
 html, body {
   height: 100%;
+  overflow-x: hidden;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* iOS smooth scroll */
 }
 
 body {
@@ -25,8 +27,10 @@ body {
   margin: 0 auto;
   padding: 1.5rem;
   text-align: center;
+
   min-height: 100vh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ---------------------------------------------------
@@ -66,24 +70,24 @@ body {
 }
 
 /* ---------------------------------------------------
-   TABLE CONTAINER — SWIPE SUPPORT + SHADOW HINTS
+   TABLE CONTAINER — Fully iPhone Scrollable
 --------------------------------------------------- */
 
 .table-container {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  display: block;
 
-  overflow-x: auto;
+  overflow-x: scroll;      /* force horizontal scrolling */
   overflow-y: visible;
 
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-x;
+  -webkit-overflow-scrolling: touch; /* iOS swipe fix */
+  touch-action: pan-x pan-y;         /* allow both gestures */
 
   position: relative;
   padding-bottom: 16px;
 }
 
+/* Right scroll shadow */
 .table-container::after {
   content: "";
   position: absolute;
@@ -97,6 +101,7 @@ body {
   opacity: 1;
 }
 
+/* Left scroll shadow */
 .table-container.scrolled-left::before {
   content: "";
   position: absolute;
@@ -128,6 +133,8 @@ body {
   overflow: hidden;
 
   box-shadow: 0 4px 14px rgba(0,0,0,0.09);
+
+  -webkit-overflow-scrolling: touch; /* prevents Safari snapping */
 }
 
 /* ---------------------------------------------------
@@ -176,7 +183,7 @@ body {
 }
 
 /* ---------------------------------------------------
-   MSR AVERAGE COLOR CODING (NEW TIERS)
+   MSR AVERAGE COLOR CODING (New Tiers)
 --------------------------------------------------- */
 
 .msr-elite {
@@ -190,22 +197,23 @@ body {
 }
 
 .msr-emerging {
-  color: #C9A100;   /* Gold-ish */
+  color: #C9A100;   /* Gold */
   font-weight: 650;
 }
 
 .msr-developing {
-  color: #888;      /* Neutral/Grey */
+  color: #888;      /* Gray */
   font-weight: 600;
 }
 
 /* ---------------------------------------------------
-   NO MOBILE ALTERNATE VIEW
+   DISABLE MOBILE ALTERNATIVE VIEW
 --------------------------------------------------- */
 
 .mobile-only {
   display: none !important;
 }
+
 
 
 
