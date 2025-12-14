@@ -84,7 +84,6 @@ body {
   padding-bottom: 16px;
 }
 
-/* Right-edge shadow (more content to the right) */
 .table-container::after {
   content: "";
   position: absolute;
@@ -98,7 +97,6 @@ body {
   opacity: 1;
 }
 
-/* Left-edge shadow (appears when scrolled) */
 .table-container.scrolled-left::before {
   content: "";
   position: absolute;
@@ -111,7 +109,6 @@ body {
   opacity: 1;
 }
 
-/* Remove right shadow when fully scrolled */
 .table-container.scrolled-right::after {
   opacity: 0;
 }
@@ -152,7 +149,6 @@ body {
   z-index: 10;
 }
 
-/* Sort arrow animation */
 .sort-arrow {
   animation: sort-wiggle 0.4s ease-in-out;
 }
@@ -180,21 +176,26 @@ body {
 }
 
 /* ---------------------------------------------------
-   MSR COLOR CODING
+   MSR AVERAGE COLOR CODING (NEW TIERS)
 --------------------------------------------------- */
 
-.msr-high {
-  color: #C41E3A;
+.msr-elite {
+  color: #C41E3A;   /* Cardinal Red */
   font-weight: 800;
 }
 
-.msr-mid {
-  color: #d67b00;
-  font-weight: 600;
+.msr-strong {
+  color: #D67B00;   /* Amber */
+  font-weight: 700;
 }
 
-.msr-low {
-  color: #888;
+.msr-emerging {
+  color: #C9A100;   /* Gold-ish */
+  font-weight: 650;
+}
+
+.msr-developing {
+  color: #888;      /* Neutral/Grey */
   font-weight: 600;
 }
 
@@ -205,6 +206,7 @@ body {
 .mobile-only {
   display: none !important;
 }
+
 
 
 

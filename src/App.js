@@ -10,7 +10,7 @@ function App() {
     direction: "desc",
   });
 
-  // 🔥 Use the corrected file name
+  // Correct CSV filename
   const csvUrl = process.env.PUBLIC_URL + "/stt_msr.csv";
 
   /* ---------------------------------------------
@@ -20,9 +20,9 @@ function App() {
     d3.csv(csvUrl).then((data) => {
       const cleaned = data.map((row) => ({
         Name: row["Name"],
-        Games: Number(row["Games Played"]),   // <- Correct header
+        Games: Number(row["Games Played"]),
         MSR: Number(row["MSR"]),
-        MSR_Avg: Number(row["MSR Avg"]),      // <- Correct header
+        MSR_Avg: Number(row["MSR Avg"]),
       }));
 
       setPlayerData(cleaned);
@@ -30,7 +30,7 @@ function App() {
   }, [csvUrl]);
 
   /* ---------------------------------------------
-     SORTING
+     SORTING LOGIC
   --------------------------------------------- */
   const handleSort = (key) => {
     let direction = "asc";
@@ -43,25 +43,31 @@ function App() {
   const sortedData = [...playerData].sort((a, b) => {
     const aVal = a[sortConfig.key];
     const bVal = b[sortConfig.key];
+
     if (aVal < bVal) return sortConfig.direction === "asc" ? -1 : 1;
     if (aVal > bVal) return sortConfig.direction === "asc" ? 1 : -1;
     return 0;
   });
 
   /* ---------------------------------------------
-     FILTER
+     FILTER — SEARCH BY NAME
   --------------------------------------------- */
   const filteredData = sortedData.filter((player) =>
-    player.Name.toLowerCase().includes(searchTerm.toLowerCase())
+    player.Name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   /* ---------------------------------------------
-     COLOR CODING FOR MSR
+     COLOR CODING BASED ON MSR AVERAGE TIERS
+     Elite      >= 20
+     Strong     >= 10
+     Emerging   >= 1
+     Developing < 1
   --------------------------------------------- */
-  const getMSRClass = (value) => {
-    if (value >= 35) return "msr-high";
-    if (value >= 15) return "msr-mid";
-    return "msr-low";
+  const getMSRClass = (avg) => {
+    if (avg >= 20) return "msr-elite";
+    if (avg >= 10) return "msr-strong";
+    if (avg >= 1) return "msr-emerging";
+    return "msr-developing";
   };
 
   /* ---------------------------------------------
@@ -95,10 +101,14 @@ function App() {
               <tr key={idx}>
                 <td>{player.Name}</td>
                 <td>{player.Games}</td>
-                <td className={getMSRClass(player.MSR)}>
-                  {player.MSR.toFixed(2)}
+
+                {/* MSR Value */}
+                <td>{player.MSR.toFixed(2)}</td>
+
+                {/* MSR Avg with Color Tier */}
+                <td className={getMSRClass(player.MSR_Avg)}>
+                  {player.MSR_Avg.toFixed(2)}
                 </td>
-                <td>{player.MSR_Avg.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
@@ -109,6 +119,7 @@ function App() {
 }
 
 export default App;
+
 
 
 
