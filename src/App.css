@@ -1,25 +1,12 @@
-/* ---------------------------------------------------
-   GLOBAL + PAGE LAYOUT — iPhone Scroll Fixes
---------------------------------------------------- */
-
+/* GLOBAL LAYOUT */
 html, body {
   height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* iOS smooth scroll */
 }
 
 body {
   margin: 0;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
   background-color: #f3f5f7;
-  color: #333;
-}
-
-#root {
-  min-height: 100vh;
+  font-family: "Inter", sans-serif;
 }
 
 .app-container {
@@ -27,192 +14,139 @@ body {
   margin: 0 auto;
   padding: 1.5rem;
   text-align: center;
-
-  min-height: 100vh;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
-/* ---------------------------------------------------
-   HEADER — St. T’s Cardinal Red Gradient
---------------------------------------------------- */
-
+/* HEADER */
 .app-header {
   font-size: 2rem;
   font-weight: 800;
   margin-bottom: 1.25rem;
-
   background: linear-gradient(90deg, #C41E3A, #E64141);
   -webkit-background-clip: text;
   color: transparent;
-
   text-transform: uppercase;
-  letter-spacing: 1.5px;
 }
 
-/* ---------------------------------------------------
-   SEARCH BOX
---------------------------------------------------- */
-
+/* SEARCH BAR */
 .search-bar {
-  display: block;
-  width: 100%;
   max-width: 420px;
-  margin: 0 auto 1.5rem auto;
+  width: 100%;
   padding: 0.75rem 1rem;
-  font-size: 1rem;
-
-  border: 1px solid #d1d1d1;
   border-radius: 10px;
-  background: white;
-
+  border: 1px solid #ccc;
+  margin-bottom: 1.5rem;
   box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
-/* ---------------------------------------------------
-   TABLE CONTAINER — Fully iPhone Scrollable
---------------------------------------------------- */
-
+/* TABLE CONTAINER */
 .table-container {
-  width: 100%;
-  display: block;
-
-  overflow-x: scroll;      /* force horizontal scrolling */
-  overflow-y: visible;
-
-  -webkit-overflow-scrolling: touch; /* iOS swipe fix */
-  touch-action: pan-x pan-y;         /* allow both gestures */
-
-  position: relative;
-  padding-bottom: 16px;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  -webkit-overflow-scrolling: touch;
 }
-
-/* Right scroll shadow */
-.table-container::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 40px;
-  height: 100%;
-  pointer-events: none;
-  background: linear-gradient(to left, rgba(0,0,0,0.15), rgba(0,0,0,0));
-  transition: opacity 0.3s ease;
-  opacity: 1;
-}
-
-/* Left scroll shadow */
-.table-container.scrolled-left::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 40px;
-  height: 100%;
-  pointer-events: none;
-  background: linear-gradient(to right, rgba(0,0,0,0.15), rgba(0,0,0,0));
-  opacity: 1;
-}
-
-.table-container.scrolled-right::after {
-  opacity: 0;
-}
-
-/* ---------------------------------------------------
-   TABLE STYLING
---------------------------------------------------- */
 
 .leaderboard-table {
   width: max-content;
-  min-width: 600px;
+  min-width: 650px;
   margin: 0 auto;
-
   border-collapse: collapse;
   background: white;
   border-radius: 14px;
-  overflow: hidden;
-
-  box-shadow: 0 4px 14px rgba(0,0,0,0.09);
-
-  -webkit-overflow-scrolling: touch; /* prevents Safari snapping */
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
 }
 
-/* ---------------------------------------------------
-   TABLE HEADER
---------------------------------------------------- */
-
+/* TABLE HEADER */
 .leaderboard-table th {
   background-color: #C41E3A;
   color: white;
   padding: 12px 16px;
   font-size: 0.95rem;
-
-  text-align: left;
   white-space: nowrap;
   cursor: pointer;
-
-  position: sticky;
-  top: 0;
-  z-index: 10;
 }
 
-.sort-arrow {
-  animation: sort-wiggle 0.4s ease-in-out;
-}
-
-@keyframes sort-wiggle {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
-  100% { transform: translateY(0); }
-}
-
-/* ---------------------------------------------------
-   TABLE BODY
---------------------------------------------------- */
-
+/* TABLE BODY */
 .leaderboard-table td {
   padding: 12px 16px;
-  font-size: 0.92rem;
-  border-bottom: 1px solid #e5e7eb;
-  white-space: nowrap;
+  border-bottom: 1px solid #eee;
 }
 
-.leaderboard-table tr:hover {
-  background-color: #fff2f4;
-  transition: 0.2s ease-in-out;
-}
-
-/* ---------------------------------------------------
-   MSR AVERAGE COLOR CODING (New Tiers)
---------------------------------------------------- */
-
+/* COLOR CODING */
 .msr-elite {
-  color: #C41E3A;   /* Cardinal Red */
+  color: #C41E3A;
   font-weight: 800;
 }
 
 .msr-strong {
-  color: #D67B00;   /* Amber */
+  color: #d67b00;
   font-weight: 700;
 }
 
 .msr-emerging {
-  color: #C9A100;   /* Gold */
-  font-weight: 650;
-}
-
-.msr-developing {
-  color: #888;      /* Gray */
+  color: #777;
   font-weight: 600;
 }
 
-/* ---------------------------------------------------
-   DISABLE MOBILE ALTERNATIVE VIEW
---------------------------------------------------- */
-
+/* MOBILE CARDS */
 .mobile-only {
-  display: none !important;
+  display: none;
 }
+
+@media (max-width: 700px) {
+  .leaderboard-table {
+    display: none;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+
+  .mobile-card {
+    background: white;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+    text-align: left;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  }
+
+  .mobile-name {
+    position: sticky;
+    top: 0;
+    background: white;
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+    color: #C41E3A;
+  }
+
+  .stat {
+    font-size: 0.9rem;
+    margin: 2px 0;
+  }
+}
+
+/* FADE-IN ANIMATION */
+.fade-in {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fadeIn 0.35s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* HIGHLIGHT SEARCH MATCH */
+mark {
+  background: #ffe38f;
+  padding: 0 2px;
+  border-radius: 3px;
+}
+
 
 
 

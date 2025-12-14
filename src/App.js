@@ -10,11 +10,11 @@ function App() {
     direction: "desc",
   });
 
-  // Correct CSV filename
+  // CSV file in /public
   const csvUrl = process.env.PUBLIC_URL + "/stt_msr.csv";
 
   /* ---------------------------------------------
-     LOAD DATA + MAP CSV HEADERS CORRECTLY
+     LOAD DATA FROM CSV
   --------------------------------------------- */
   useEffect(() => {
     d3.csv(csvUrl).then((data) => {
@@ -30,7 +30,7 @@ function App() {
   }, [csvUrl]);
 
   /* ---------------------------------------------
-     SORTING LOGIC
+     SORTING
   --------------------------------------------- */
   const handleSort = (key) => {
     let direction = "asc";
@@ -50,24 +50,29 @@ function App() {
   });
 
   /* ---------------------------------------------
-     FILTER — SEARCH BY NAME
+     FILTER BY SEARCH
   --------------------------------------------- */
   const filteredData = sortedData.filter((player) =>
-    player.Name?.toLowerCase().includes(searchTerm.toLowerCase())
+    player.Name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   /* ---------------------------------------------
-     COLOR CODING BASED ON MSR AVERAGE TIERS
-     Elite      >= 20
-     Strong     >= 10
-     Emerging   >= 1
-     Developing < 1
+     COLOR CODING BASED ON MSR AVERAGE
+     elite > 20, strong 10–20, emerging < 10
   --------------------------------------------- */
-  const getMSRClass = (avg) => {
-    if (avg >= 20) return "msr-elite";
-    if (avg >= 10) return "msr-strong";
-    if (avg >= 1) return "msr-emerging";
-    return "msr-developing";
+  const getMSRClass = (value) => {
+    if (value >= 20) return "msr-elite";
+    if (value >= 10) return "msr-strong";
+    return "msr-emerging";
+  };
+
+  /* ---------------------------------------------
+     SEARCH TERM HIGHLIGHTER
+  --------------------------------------------- */
+  const highlightMatch = (text) => {
+    if (!searchTerm) return text;
+    const regex = new RegExp(`(${searchTerm})`, "i");
+    return text.replace(regex, "<mark>$1</mark>");
   };
 
   /* ---------------------------------------------
@@ -85,40 +90,68 @@ function App() {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
 
+      {/* Desktop Table View */}
       <div className="table-container">
         <table className="leaderboard-table">
           <thead>
             <tr>
-              <th onClick={() => handleSort("Name")}>Name</th>
-              <th onClick={() => handleSort("Games")}>Games</th>
-              <th onClick={() => handleSort("MSR")}>MSR</th>
-              <th onClick={() => handleSort("MSR_Avg")}>MSR Avg</th>
+              <th onClick={() => handleSort("Name")}>
+                Name {sortConfig.key === "Name" && <span className="sort-arrow">⬍</span>}
+              </th>
+              <th onClick={() => handleSort("Games")}>
+                Games {sortConfig.key === "Games" && <span className="sort-arrow">⬍</span>}
+              </th>
+              <th onClick={() => handleSort("MSR")}>
+                MSR {sortConfig.key === "MSR" && <span className="sort-arrow">⬍</span>}
+              </th>
+              <th onClick={() => handleSort("MSR_Avg")}>
+                MSR Avg {sortConfig.key === "MSR_Avg" && <span className="sort-arrow">⬍</span>}
+              </th>
             </tr>
           </thead>
 
           <tbody>
             {filteredData.map((player, idx) => (
-              <tr key={idx}>
-                <td>{player.Name}</td>
+              <tr key={idx} className="fade-in">
+                <td
+                  dangerouslySetInnerHTML={{ __html: highlightMatch(player.Name) }}
+                />
                 <td>{player.Games}</td>
-
-                {/* MSR Value */}
-                <td>{player.MSR.toFixed(2)}</td>
-
-                {/* MSR Avg with Color Tier */}
-                <td className={getMSRClass(player.MSR_Avg)}>
-                  {player.MSR_Avg.toFixed(2)}
-                </td>
+                <td className={getMSRClass(player.MSR)}>{player.MSR.toFixed(2)}</td>
+                <td className={getMSRClass(player.MSR_Avg)}>{player.MSR_Avg.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="mobile-only">
+        {filteredData.map((player, idx) => (
+          <div className="mobile-card fade-in" key={idx}>
+            <div
+              className="mobile-name"
+              dangerouslySetInnerHTML={{ __html: highlightMatch(player.Name) }}
+            />
+
+            <div className="stat">Games: {player.Games}</div>
+
+            <div className={`stat ${getMSRClass(player.MSR)}`}>
+              MSR: {player.MSR.toFixed(2)}
+            </div>
+
+            <div className={`stat ${getMSRClass(player.MSR_Avg)}`}>
+              Avg: {player.MSR_Avg.toFixed(2)}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
 }
 
 export default App;
+
 
 
 
