@@ -10,18 +10,19 @@ function App() {
     direction: "desc",
   });
 
-  const csvUrl = process.env.PUBLIC_URL + "/stt_msr_clean_fixed.csv";
+  // 🔥 Use the corrected file name
+  const csvUrl = process.env.PUBLIC_URL + "/stt_msr.csv";
 
   /* ---------------------------------------------
-     LOAD DATA
+     LOAD DATA + MAP CSV HEADERS CORRECTLY
   --------------------------------------------- */
   useEffect(() => {
     d3.csv(csvUrl).then((data) => {
       const cleaned = data.map((row) => ({
-        Name: row.Name,
-        Games: Number(row.Games),
-        MSR: Number(row.MSR),
-        MSR_Avg: Number(row.MSR_Avg),
+        Name: row["Name"],
+        Games: Number(row["Games Played"]),   // <- Correct header
+        MSR: Number(row["MSR"]),
+        MSR_Avg: Number(row["MSR Avg"]),      // <- Correct header
       }));
 
       setPlayerData(cleaned);
@@ -29,40 +30,7 @@ function App() {
   }, [csvUrl]);
 
   /* ---------------------------------------------
-     SCROLL SHADOW EFFECT
-  --------------------------------------------- */
-  useEffect(() => {
-    const container = document.querySelector(".table-container");
-
-    const onScroll = () => {
-      if (!container) return;
-
-      // left shadow
-      if (container.scrollLeft > 0) {
-        container.classList.add("scrolled-left");
-      } else {
-        container.classList.remove("scrolled-left");
-      }
-
-      // right shadow
-      if (
-        container.scrollLeft + container.clientWidth >=
-        container.scrollWidth - 2
-      ) {
-        container.classList.add("scrolled-right");
-      } else {
-        container.classList.remove("scrolled-right");
-      }
-    };
-
-    if (container) container.addEventListener("scroll", onScroll);
-    return () => {
-      if (container) container.removeEventListener("scroll", onScroll);
-    };
-  }, []);
-
-  /* ---------------------------------------------
-     SORTING LOGIC
+     SORTING
   --------------------------------------------- */
   const handleSort = (key) => {
     let direction = "asc";
@@ -75,16 +43,21 @@ function App() {
   const sortedData = [...playerData].sort((a, b) => {
     const aVal = a[sortConfig.key];
     const bVal = b[sortConfig.key];
-
     if (aVal < bVal) return sortConfig.direction === "asc" ? -1 : 1;
     if (aVal > bVal) return sortConfig.direction === "asc" ? 1 : -1;
     return 0;
   });
 
+  /* ---------------------------------------------
+     FILTER
+  --------------------------------------------- */
   const filteredData = sortedData.filter((player) =>
     player.Name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  /* ---------------------------------------------
+     COLOR CODING FOR MSR
+  --------------------------------------------- */
   const getMSRClass = (value) => {
     if (value >= 35) return "msr-high";
     if (value >= 15) return "msr-mid";
@@ -110,33 +83,10 @@ function App() {
         <table className="leaderboard-table">
           <thead>
             <tr>
-              <th onClick={() => handleSort("Name")}>
-                Name{" "}
-                {sortConfig.key === "Name" && (
-                  <span className="sort-arrow">⬍</span>
-                )}
-              </th>
-
-              <th onClick={() => handleSort("Games")}>
-                Games{" "}
-                {sortConfig.key === "Games" && (
-                  <span className="sort-arrow">⬍</span>
-                )}
-              </th>
-
-              <th onClick={() => handleSort("MSR")}>
-                MSR{" "}
-                {sortConfig.key === "MSR" && (
-                  <span className="sort-arrow">⬍</span>
-                )}
-              </th>
-
-              <th onClick={() => handleSort("MSR_Avg")}>
-                MSR Avg{" "}
-                {sortConfig.key === "MSR_Avg" && (
-                  <span className="sort-arrow">⬍</span>
-                )}
-              </th>
+              <th onClick={() => handleSort("Name")}>Name</th>
+              <th onClick={() => handleSort("Games")}>Games</th>
+              <th onClick={() => handleSort("MSR")}>MSR</th>
+              <th onClick={() => handleSort("MSR_Avg")}>MSR Avg</th>
             </tr>
           </thead>
 
@@ -144,14 +94,11 @@ function App() {
             {filteredData.map((player, idx) => (
               <tr key={idx}>
                 <td>{player.Name}</td>
-
                 <td>{player.Games}</td>
-
                 <td className={getMSRClass(player.MSR)}>
                   {player.MSR.toFixed(2)}
                 </td>
-
-                <td>{player.MSR_Avg.toFixed(3)}</td>
+                <td>{player.MSR_Avg.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
@@ -162,6 +109,8 @@ function App() {
 }
 
 export default App;
+
+
 
 
 
