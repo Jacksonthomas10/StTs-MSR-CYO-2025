@@ -2,6 +2,11 @@
    GLOBAL + PAGE LAYOUT
 --------------------------------------------------- */
 
+html, body {
+  height: 100%;
+  overflow-y: auto;
+}
+
 body {
   margin: 0;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
@@ -11,15 +16,21 @@ body {
   color: #333;
 }
 
+#root {
+  min-height: 100vh;
+}
+
 .app-container {
   max-width: 900px;
   margin: 0 auto;
   padding: 1.5rem;
   text-align: center;
+  min-height: 100vh;
+  overflow-y: auto;
 }
 
 /* ---------------------------------------------------
-   HEADER (St. T’s Cardinal Red Gradient)
+   HEADER — St. T’s Cardinal Red Gradient
 --------------------------------------------------- */
 
 .app-header {
@@ -106,7 +117,7 @@ body {
 }
 
 /* ---------------------------------------------------
-   CARD-STYLE TABLE
+   TABLE STYLING
 --------------------------------------------------- */
 
 .leaderboard-table {
@@ -187,10 +198,14 @@ body {
   font-weight: 600;
 }
 
-/* No mobile alternate layout */
+/* ---------------------------------------------------
+   NO MOBILE ALTERNATE VIEW
+--------------------------------------------------- */
+
 .mobile-only {
   display: none !important;
 }
+
 
 
 
