@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/StTs-MSR-CYO-2025/static/css/main.c000ac8e.css",
+    "main.css": "/StTs-MSR-CYO-2025/static/css/main.546d8d10.css",
     "main.js": "/StTs-MSR-CYO-2025/static/js/main.160738d9.js",
     "index.html": "/StTs-MSR-CYO-2025/index.html",
-    "main.c000ac8e.css.map": "/StTs-MSR-CYO-2025/static/css/main.c000ac8e.css.map",
+    "main.546d8d10.css.map": "/StTs-MSR-CYO-2025/static/css/main.546d8d10.css.map",
     "main.160738d9.js.map": "/StTs-MSR-CYO-2025/static/js/main.160738d9.js.map"
   },
   "entrypoints": [
-    "static/css/main.c000ac8e.css",
+    "static/css/main.546d8d10.css",
     "static/js/main.160738d9.js"
   ]
 }
