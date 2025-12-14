@@ -6,15 +6,14 @@ function App() {
   const [playerData, setPlayerData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState({
-    key: "MSR",
+    key: "MSR_Avg",
     direction: "desc",
   });
 
-  // CSV file in /public
   const csvUrl = process.env.PUBLIC_URL + "/stt_msr.csv";
 
   /* ---------------------------------------------
-     LOAD DATA FROM CSV
+     LOAD DATA
   --------------------------------------------- */
   useEffect(() => {
     d3.csv(csvUrl).then((data) => {
@@ -24,19 +23,20 @@ function App() {
         MSR: Number(row["MSR"]),
         MSR_Avg: Number(row["MSR Avg"]),
       }));
-
       setPlayerData(cleaned);
     });
   }, [csvUrl]);
 
   /* ---------------------------------------------
-     SORTING
+     SORTING LOGIC
   --------------------------------------------- */
   const handleSort = (key) => {
     let direction = "asc";
+
     if (sortConfig.key === key && sortConfig.direction === "asc") {
       direction = "desc";
     }
+
     setSortConfig({ key, direction });
   };
 
@@ -49,39 +49,24 @@ function App() {
     return 0;
   });
 
-  /* ---------------------------------------------
-     FILTER BY SEARCH
-  --------------------------------------------- */
   const filteredData = sortedData.filter((player) =>
     player.Name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   /* ---------------------------------------------
-     COLOR CODING BASED ON MSR AVERAGE
-     elite > 20, strong 10–20, emerging < 10
+     COLOR CODING FOR MSR AVG
   --------------------------------------------- */
   const getMSRClass = (value) => {
-    if (value >= 20) return "msr-elite";
-    if (value >= 10) return "msr-strong";
-    return "msr-emerging";
+    if (value > 20) return "msr-high";
+    if (value >= 10) return "msr-mid";
+    return "msr-low";
   };
 
-  /* ---------------------------------------------
-     SEARCH TERM HIGHLIGHTER
-  --------------------------------------------- */
-  const highlightMatch = (text) => {
-    if (!searchTerm) return text;
-    const regex = new RegExp(`(${searchTerm})`, "i");
-    return text.replace(regex, "<mark>$1</mark>");
-  };
-
-  /* ---------------------------------------------
-     RENDER
-  --------------------------------------------- */
   return (
     <div className="app-container">
       <header className="app-header">St. T’s MSR Leaderboard</header>
 
+      {/* Search */}
       <input
         type="text"
         className="search-bar"
@@ -90,58 +75,59 @@ function App() {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
 
-      {/* Desktop Table View */}
+      {/* ---------- DESKTOP TABLE ---------- */}
       <div className="table-container">
         <table className="leaderboard-table">
           <thead>
             <tr>
               <th onClick={() => handleSort("Name")}>
-                Name {sortConfig.key === "Name" && <span className="sort-arrow">⬍</span>}
+                Name {sortConfig.key === "Name" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
               <th onClick={() => handleSort("Games")}>
-                Games {sortConfig.key === "Games" && <span className="sort-arrow">⬍</span>}
+                Games {sortConfig.key === "Games" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
               <th onClick={() => handleSort("MSR")}>
-                MSR {sortConfig.key === "MSR" && <span className="sort-arrow">⬍</span>}
+                MSR {sortConfig.key === "MSR" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
               <th onClick={() => handleSort("MSR_Avg")}>
-                MSR Avg {sortConfig.key === "MSR_Avg" && <span className="sort-arrow">⬍</span>}
+                MSR Avg {sortConfig.key === "MSR_Avg" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
             </tr>
           </thead>
 
           <tbody>
             {filteredData.map((player, idx) => (
-              <tr key={idx} className="fade-in">
-                <td
-                  dangerouslySetInnerHTML={{ __html: highlightMatch(player.Name) }}
-                />
+              <tr key={idx}>
+                <td>{player.Name}</td>
                 <td>{player.Games}</td>
-                <td className={getMSRClass(player.MSR)}>{player.MSR.toFixed(2)}</td>
-                <td className={getMSRClass(player.MSR_Avg)}>{player.MSR_Avg.toFixed(2)}</td>
+                <td>{player.MSR.toFixed(2)}</td>
+                <td className={getMSRClass(player.MSR_Avg)}>
+                  {player.MSR_Avg.toFixed(2)}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      {/* Mobile Card View */}
+      {/* ---------- MOBILE CARD VIEW ---------- */}
       <div className="mobile-only">
+        <div className="mobile-sort-bar">
+          <button onClick={() => handleSort("Name")}>
+            Name {sortConfig.key === "Name" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+          </button>
+          <button onClick={() => handleSort("MSR_Avg")}>
+            MSR Avg {sortConfig.key === "MSR_Avg" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+          </button>
+        </div>
+
         {filteredData.map((player, idx) => (
-          <div className="mobile-card fade-in" key={idx}>
-            <div
-              className="mobile-name"
-              dangerouslySetInnerHTML={{ __html: highlightMatch(player.Name) }}
-            />
-
-            <div className="stat">Games: {player.Games}</div>
-
-            <div className={`stat ${getMSRClass(player.MSR)}`}>
-              MSR: {player.MSR.toFixed(2)}
-            </div>
-
-            <div className={`stat ${getMSRClass(player.MSR_Avg)}`}>
-              Avg: {player.MSR_Avg.toFixed(2)}
+          <div className="mobile-card" key={idx}>
+            <div className="mobile-name">{player.Name}</div>
+            <div className="mobile-stat">Games: {player.Games}</div>
+            <div className="mobile-stat">MSR: {player.MSR.toFixed(2)}</div>
+            <div className={`mobile-stat ${getMSRClass(player.MSR_Avg)}`}>
+              MSR Avg: {player.MSR_Avg.toFixed(2)}
             </div>
           </div>
         ))}
@@ -151,6 +137,7 @@ function App() {
 }
 
 export default App;
+
 
 
 
